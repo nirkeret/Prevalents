@@ -1,6 +1,6 @@
 library(Rcpp)
 library(survival)
-library(MASS)
+
 sourceCpp("Prevalents.cpp")
 
 ## Assume in the following that:
