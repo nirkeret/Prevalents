@@ -22,7 +22,6 @@ cox_estimates = pairwise_estimates = pairwise_SE_boot2 = pairwise_SE_boot3 = mat
 prev = which(UKB$V < UKB$R)
 inc = which(UKB$V > UKB$R & UKB$delta1 == 1)
 
-############## univariate ##################
 for(i in 1:24)
 {
   SNPind = i-1 + 9
