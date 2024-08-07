@@ -1,3 +1,4 @@
+library(MASS)
 
 # coefficients for transition healthy -> illness
 b_dis = c(2,-1.5,0.1,-0.5,1,-2.5,-1,0) # Settings A and B
