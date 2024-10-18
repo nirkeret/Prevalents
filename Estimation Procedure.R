@@ -37,8 +37,7 @@ elp13 = exp(X %*% coef(fit2))
 elp23 = exp(cbind(X,V) %*% coef(fit3))
 elpC = exp(X %*% coef(fitC))
 
-# getZetaTermsC should be used when the censoring distribution is 
-# estimated, and otherwise getZetaTerms should be used.
+# getZetaTermsC should be used when the censoring distribution is estimated, and otherwise getZetaTerms should be used.
 # The ZetaTerms functions require the matrix X of covariates associated with transition 2->3, not including V.
 ZetaTerms = getZetaTermsC(R = R, V = V, D1 = D1, D2 = D2, X23 = as.matrix(X), 
                          elp13 = elp13, elp23 = elp23, elpC = elpC,
@@ -60,7 +59,7 @@ resPair = resPairOpt$par
 # demonstrating its bias when recruitment age does not start from zero)
 Events12sorted = sort(V[D1])
 jumps12 = diff(c(0,H012_estimated(Events12sorted)))
-elp23_noV = exp(X %*% coef(fit3)[names(coef(fit3)) != "V"])  ## The Likelihood 2 estimation function requires no V here 
+elp23_noV = exp(X %*% coef(fit3)[names(coef(fit3)) != "V"])  ## The Likelihood 2 estimation function requires that V is not included in elp23. 
 
 resL2Opt = try(optim(coef(fit1),getLogLike2,X12 = X,D1=D1,H012V = H012_estimated(V),
                      R = R, H012R = H012_estimated(R), H013R = H013_estimated(R),
