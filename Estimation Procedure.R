@@ -6,7 +6,7 @@ sourceCpp("Prevalents.cpp")
 ## Assume in the following that:
 # The data are organized in a random order. If not, should be shuffled.
 # V = first observed age (minimum of disease diagnosis age, death age or censoring)
-# W = second observed age, after illness diagnosis (minimum of death age or censoring)
+# W = second observed age, after disease diagnosis (minimum of death age or censoring)
 # D1 = Event indicator, takes 1 if V is an illness age.
 # D2 = Event indicator, takes 1 if V is a death age.
 # D3 = Event indicator, takes 1 if W is a death age.
