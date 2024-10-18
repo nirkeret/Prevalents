@@ -7,7 +7,7 @@ sourceCpp("Prevalents.cpp")
 # The data are organized in a random order. If not, should be shuffled.
 # V = first observed age (minimum of disease diagnosis age, death age or censoring)
 # W = second observed age, after disease diagnosis (minimum of death age or censoring)
-# D1 = Event indicator, takes 1 if V is an illness age.
+# D1 = Event indicator, takes 1 if V is an disease age.
 # D2 = Event indicator, takes 1 if V is a death age.
 # D3 = Event indicator, takes 1 if W is a death age.
 # X = matrix of covariates. The same covariates will be used in all models, but this can be changed manually.
@@ -16,21 +16,23 @@ sourceCpp("Prevalents.cpp")
 n = nrow(X) #sample size
 numPairs = 25 # user-defined number of sampled pairs per observation. 
 
-#fitting marginal Cox models using partial likelihood 
-  
+#fitting marginal Cox models using partial likelihood. Warnings are produced because the data include prevalent observations which standard partial likelihood estimation cannot use. This is expected and therfore suppressed. 
+suppressWarnings({  
 fit1 = coxph(Surv(R, V, D1, type = "counting") ~ X)
 fit2 = coxph(Surv(R, V, D2, type="counting") ~ X)
-# V or functional forms of it can be incorporated as covariates in the illness -> death transition:
+# V or functional forms of it can be incorporated as covariates in the disease -> death transition:
 fit3 = coxph(Surv(pmax(R,V), W, D3, type = "counting") ~ X + V, subset = D1)
 # If censoring is assumed random and should be estimated too:
 fitC = coxph(Surv(R,V,1-D1-D2,type = "counting") ~ X)
-
+})
 #Getting the estimated baseline hazard functions:
+suppressWarnings({  
 H012_estimated = stepfun(basehaz(fit1,centered = F)[,2],c(0,basehaz(fit1,centered = F)[,1]))
 H013_estimated = stepfun(basehaz(fit2,centered = F)[,2],c(0,basehaz(fit2,centered = F)[,1]))
 H023_estimated = stepfun(basehaz(fit3,centered = F)[,2],c(0,basehaz(fit3,centered = F)[,1]))
 H0C_estimated = stepfun(basehaz(fitC,centered = F)[,2],c(0,basehaz(fitC,centered = F)[,1]))
-  
+})
+
 elp13 = exp(X %*% coef(fit2))
 elp23 = exp(cbind(X,V) %*% coef(fit3))
 elpC = exp(X %*% coef(fitC))
